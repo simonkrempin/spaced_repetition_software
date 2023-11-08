@@ -5,70 +5,24 @@ class CardsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter UI Design',
-      theme: ThemeData(
-        useMaterial3: true, // Ensure Material 3 components are used
-      ),
-      home: const HomeScreen(),
-    );
-  }
-}
-
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("HOME"),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              // Implement search action
-            },
-          ),
-        ],
-      ),
-      body: ListView(
-        children: const [
-          ListTile(
-            leading: CircleAvatar(child: Text('A')),
-            title: Text("Bürgerlichesgesetzbuch"),
-            trailing: Icon(Icons.more_vert),
-          ),
-          ListTile(
-            leading: CircleAvatar(child: Text('A')),
-            title: Text("Handelsgesetzbuch"),
-            trailing: Icon(Icons.more_vert),
-          ),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.folder),
-            label: "Items",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.play_arrow),
-            label: "Lernen",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.share),
-            label: "Shared",
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Implement action for adding new items
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: ListView.separated(
+        separatorBuilder: (BuildContext context, int index) {
+          return const SizedBox(height: 8);
         },
-        child: const Icon(Icons.add),
+        itemBuilder: (BuildContext context, int index) {
+          return ListTile(
+            leading: const CircleAvatar(child: Text('A')),
+            title: const Text("Bürgerlichesgesetzbuch"),
+            trailing: const Icon(Icons.more_vert),
+            onTap: () => {},
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            tileColor: Theme.of(context).cardColor,
+          );
+        },
+        itemCount: 2,
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }

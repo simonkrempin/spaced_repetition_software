@@ -1,4 +1,7 @@
 import "package:flutter/material.dart";
+import "package:spaced_repetition_software/views/cards-view.dart";
+import "package:spaced_repetition_software/views/learning-view.dart";
+import "package:spaced_repetition_software/views/online-view.dart";
 
 class AppContainer extends StatefulWidget {
   const AppContainer({super.key});
@@ -8,57 +11,59 @@ class AppContainer extends StatefulWidget {
 }
 
 class _AppContainerState extends State<AppContainer> {
+  int currentPageIndex = 0;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("HOME"),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              // Implement search action
-            },
-          ),
-        ],
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text("HOME"),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.person_outlined),
+              onPressed: () {},
+            ),
+          ],
+        ),
+        body: <Widget>[
+          const CardsView(),
+          const LearningView(),
+          const OnlineView()
+        ][currentPageIndex],
+        bottomNavigationBar: NavigationBar(
+          onDestinationSelected: (int index) {
+            setState(() {
+              currentPageIndex = index;
+            });
+          },
+          selectedIndex: currentPageIndex,
+          destinations: const <Widget>[
+            NavigationDestination(
+              selectedIcon: Icon(Icons.folder),
+              icon: Icon(Icons.folder_outlined),
+              label: 'Items',
+            ),
+            NavigationDestination(
+              selectedIcon: Icon(Icons.play_arrow),
+              icon: Icon(Icons.play_arrow_outlined),
+              label: 'Lernen',
+            ),
+            NavigationDestination(
+              selectedIcon: Icon(Icons.school),
+              icon: Icon(Icons.school_outlined),
+              label: 'Shared',
+            ),
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            // Implement action for adding new items
+          },
+          child: const Icon(Icons.add),
+        ),
       ),
-      body: ListView(
-        children: const [
-          ListTile(
-            leading: CircleAvatar(child: Text('A')),
-            title: Text("Bürgerlichesgesetzbuch"),
-            trailing: Icon(Icons.more_vert),
-          ),
-          ListTile(
-            leading: CircleAvatar(child: Text('A')),
-            title: Text("Handelsgesetzbuch"),
-            trailing: Icon(Icons.more_vert),
-          ),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.folder),
-            label: "Items",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.play_arrow),
-            label: "Lernen",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.share),
-            label: "Shared",
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Implement action for adding new items
-        },
-        child: const Icon(Icons.add),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
