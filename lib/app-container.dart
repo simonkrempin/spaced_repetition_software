@@ -59,7 +59,18 @@ class _AppContainerState extends State<AppContainer> {
         ),
         floatingActionButton: ExpandableFab(
           distance: 0,
-          children: [FloatingActionButton.small(onPressed: () => {}), FloatingActionButton.small(onPressed: () => {})],
+          children: [
+            FloatingActionButton.small(
+              onPressed: () => {},
+              backgroundColor: Theme.of(context).colorScheme.surface,
+              child: Icon(Icons.folder_outlined, color: Theme.of(context).colorScheme.primary),
+            ),
+            FloatingActionButton.small(
+              onPressed: () => {},
+              backgroundColor: Theme.of(context).colorScheme.surface,
+              child: Icon(Icons.file_open_outlined, color: Theme.of(context).colorScheme.primary),
+            ),
+          ],
         ),
       ),
     );
