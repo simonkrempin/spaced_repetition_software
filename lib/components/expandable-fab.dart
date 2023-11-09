@@ -4,12 +4,10 @@ class ExpandableFab extends StatefulWidget {
   const ExpandableFab({
     super.key,
     this.initialOpen,
-    required this.distance,
     required this.children,
   });
 
   final bool? initialOpen;
-  final double distance;
   final List<Widget> children;
 
   @override
@@ -56,30 +54,33 @@ class _ExpandableFabState extends State<ExpandableFab> with SingleTickerProvider
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        for (final (index, item) in widget.children.indexed)
-          AnimatedBuilder(
-            animation: _expandAnimation,
-            builder: (BuildContext context, Widget? child) {
-              return Positioned(
-                right: 4.0,
-                bottom: (index == 0 ? 6 : 0) + 75 * _expandAnimation.value * (index + 1),
+    return SizedBox.expand(
+      child: Stack(
+        alignment: Alignment.bottomRight,
+        clipBehavior: Clip.none,
+        children: [
+          for (final (index, item) in widget.children.indexed)
+            AnimatedBuilder(
+              animation: _expandAnimation,
+              builder: (BuildContext context, Widget? child) {
+                return Positioned(
+                  right: 4.0,
+                  bottom: (index == 0 ? 6 : 0) + 75 * _expandAnimation.value * (index + 1),
+                  child: item,
+                );
+              },
+              child: FadeTransition(
+                opacity: _expandAnimation,
                 child: item,
-              );
-            },
-            child: FadeTransition(
-              opacity: _expandAnimation,
-              child: item,
+              ),
             ),
+          FloatingActionButton(
+            onPressed: toggle,
+            backgroundColor: Theme.of(context).colorScheme.surface,
+            child: Icon(Icons.add, color: Theme.of(context).colorScheme.primary),
           ),
-        FloatingActionButton(
-          onPressed: toggle,
-          backgroundColor: Theme.of(context).colorScheme.surface,
-          child: Icon(Icons.add, color: Theme.of(context).colorScheme.primary),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
