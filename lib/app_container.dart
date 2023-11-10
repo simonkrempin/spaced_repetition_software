@@ -79,14 +79,14 @@ class _AppContainerState extends State<AppContainer> {
   showFolderDialog() {
     showDialog(
       context: context,
-      builder: (context) => DeckDialog(deckId: 0),
+      builder: (alertDialogContext) => DeckDialog(providerContext: context, deckId: 0),
     );
   }
 
   showCardDialog() {
     showDialog(
       context: context,
-      builder: (context) => CardDialog(deckId: 0),
+      builder: (alertDialogContext) => CardDialog(providerContext: context, deckId: 0),
     );
   }
 }

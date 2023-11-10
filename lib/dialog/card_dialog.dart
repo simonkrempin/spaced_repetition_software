@@ -5,8 +5,9 @@ import "package:spaced_repetition_software/services/file_explorer.dart";
 
 class CardDialog extends StatelessWidget {
   final int deckId;
+  final BuildContext providerContext;
 
-  CardDialog({ required this.deckId, super.key});
+  CardDialog({ required this.providerContext, required this.deckId, super.key});
 
   final frontController = TextEditingController();
   final backController = TextEditingController();
@@ -52,7 +53,7 @@ class CardDialog extends StatelessWidget {
               FilledButton(
                 onPressed: () {
                   saveCard();
-                  context.read<ExplorerContext>().invalidateCache(deckId);
+                  providerContext.read<ExplorerContext>().invalidateCache(deckId);
                   Navigator.of(context).pop();
                 },
                 child: const Text("create"),

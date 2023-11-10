@@ -5,8 +5,9 @@ import "package:spaced_repetition_software/services/file_explorer.dart";
 
 class DeckDialog extends StatefulWidget {
   final int deckId;
+  final BuildContext providerContext;
 
-  const DeckDialog({required this.deckId, super.key});
+  const DeckDialog({ required this.providerContext, required this.deckId, super.key});
 
   @override
   State<StatefulWidget> createState() => _DeckDialogState();
@@ -53,7 +54,7 @@ class _DeckDialogState extends State<DeckDialog> {
               FilledButton(
                 onPressed: () {
                   saveDeck();
-                  context.read<ExplorerContext>().invalidateCache(widget.deckId);
+                  widget.providerContext.read<ExplorerContext>().invalidateCache(widget.deckId);
                   Navigator.of(context).pop();
                 },
                 child: const Text("create"),
