@@ -1,9 +1,11 @@
 import "package:flutter/material.dart";
-import "package:spaced_repetition_software/components/expandable-fab.dart";
-import "package:spaced_repetition_software/components/small-fab.dart";
-import 'package:spaced_repetition_software/features/explorer/explorer-view.dart';
-import "package:spaced_repetition_software/features/learning-view.dart";
-import "package:spaced_repetition_software/features/online-view.dart";
+import "package:spaced_repetition_software/components/expandable_fab.dart";
+import "package:spaced_repetition_software/components/small_fab.dart";
+import "package:spaced_repetition_software/dialog/card_dialog.dart";
+import "package:spaced_repetition_software/dialog/deck_dialog.dart";
+import 'package:spaced_repetition_software/features/explorer/explorer_view.dart';
+import "package:spaced_repetition_software/features/learning_view.dart";
+import "package:spaced_repetition_software/features/online_view.dart";
 
 class AppContainer extends StatefulWidget {
   const AppContainer({super.key});
@@ -71,42 +73,14 @@ class _AppContainerState extends State<AppContainer> {
   showFolderDialog() {
     showDialog(
       context: context,
-      builder: (context) => const AlertDialog(
-        title: Text("create new folder"),
-        content: TextField(
-          decoration: InputDecoration(
-            border: OutlineInputBorder(),
-            hintText: 'Folder Name',
-          ),
-        ),
-      ),
+      builder: (context) => DeckDialog(deckId: 0),
     );
   }
 
   showCardDialog() {
     showDialog(
       context: context,
-      builder: (context) => const AlertDialog(
-        title: Text("create new card"),
-        content: SizedBox.expand(
-          child: Column(
-            children: [
-              TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Enter a search term',
-                ),
-              ),
-              TextField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Enter a search term',
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+      builder: (context) => CardDialog(deckId: 0),
     );
   }
 }

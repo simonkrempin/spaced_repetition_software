@@ -4,7 +4,7 @@ class DBConnector {
   static Future<Database>? _dbConnection;
 
   static Future<void> connect() async {
-    _dbConnection = openDatabase("card_store.db");
+    _dbConnection = openDatabase("learn-loop.db");
   }
 
   static Future<Database> getConnection () async {

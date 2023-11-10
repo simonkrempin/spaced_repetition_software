@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:spaced_repetition_software/model/deck.dart';
 
-class ExplorerCard extends StatelessWidget {
-  const ExplorerCard({super.key});
+class ExplorerDeckItem extends StatelessWidget {
+  final Deck deck;
+
+  const ExplorerDeckItem({ required this.deck, super.key});
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       leading: const CircleAvatar(child: Text('A')),
-      title: const Text("Bürgerlichesgesetzbuch"),
+      title: Text(deck.name),
       trailing: const Icon(Icons.more_vert),
       onTap: () => {},
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
