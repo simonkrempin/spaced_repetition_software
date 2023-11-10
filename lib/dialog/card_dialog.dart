@@ -1,4 +1,6 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
+import "package:provider/provider.dart";
+import "package:spaced_repetition_software/context/explorer_context.dart";
 import "package:spaced_repetition_software/services/file_explorer.dart";
 
 class CardDialog extends StatelessWidget {
@@ -50,6 +52,7 @@ class CardDialog extends StatelessWidget {
               FilledButton(
                 onPressed: () {
                   saveCard();
+                  context.read<ExplorerContext>().invalidateCache(deckId);
                   Navigator.of(context).pop();
                 },
                 child: const Text("create"),

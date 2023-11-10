@@ -1,4 +1,6 @@
 import "package:flutter/material.dart";
+import "package:provider/provider.dart";
+import "package:spaced_repetition_software/context/explorer_context.dart";
 import "package:spaced_repetition_software/services/file_explorer.dart";
 
 class DeckDialog extends StatefulWidget {
@@ -51,6 +53,7 @@ class _DeckDialogState extends State<DeckDialog> {
               FilledButton(
                 onPressed: () {
                   saveDeck();
+                  context.read<ExplorerContext>().invalidateCache(widget.deckId);
                   Navigator.of(context).pop();
                 },
                 child: const Text("create"),

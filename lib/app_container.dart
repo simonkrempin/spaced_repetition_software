@@ -6,6 +6,8 @@ import "package:spaced_repetition_software/dialog/deck_dialog.dart";
 import 'package:spaced_repetition_software/features/explorer/explorer_view.dart';
 import "package:spaced_repetition_software/features/learning_view.dart";
 import "package:spaced_repetition_software/features/online_view.dart";
+import 'package:spaced_repetition_software/context/explorer_context.dart';
+import "package:provider/provider.dart";
 
 class AppContainer extends StatefulWidget {
   const AppContainer({super.key});
@@ -32,7 +34,11 @@ class _AppContainerState extends State<AppContainer> {
             ),
           ],
         ),
-        body: <Widget>[const ExplorerView(), const LearningView(), const OnlineView()][currentPageIndex],
+        body: <Widget>[
+          const ExplorerView(),
+          const LearningView(),
+          const OnlineView(),
+        ][currentPageIndex],
         bottomNavigationBar: NavigationBar(
           backgroundColor: Theme.of(context).colorScheme.background,
           indicatorColor: Theme.of(context).colorScheme.primaryContainer,

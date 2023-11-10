@@ -1,7 +1,9 @@
 import "package:flutter/material.dart";
-import "package:spaced_repetition_software/app-container.dart";
+import "package:spaced_repetition_software/app_container.dart";
+import 'package:spaced_repetition_software/context/explorer_context.dart';
 import "package:spaced_repetition_software/services/db_connector.dart";
 import "package:spaced_repetition_software/services/file_explorer.dart";
+import "package:provider/provider.dart";
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,7 +29,10 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const AppContainer(),
+      home: ChangeNotifierProvider(
+        create: (_) => ExplorerContext(deckId: 0),
+        child: const AppContainer(),
+      )
     );
   }
 }

@@ -24,7 +24,7 @@ checkForTables() async {
   }
 }
 
-Future<List<Deck>> getDeck(int parentId) async {
+Future<List<Deck>> getDecks(int parentId) async {
   var db = await DBConnector.getConnection();
   var folders = await db.query("deck", where: "parent_id = $parentId");
   return folders.map((f) => Deck.fromMap(f)).toList();
