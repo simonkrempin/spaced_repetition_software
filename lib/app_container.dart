@@ -72,11 +72,15 @@ class _AppContainerState extends State<AppContainer> {
             ),
           ],
         ),
-        floatingActionButton: ExpandableFab(
-          children: [
-            SmallFab(icon: Icons.folder_outlined, onPressed: showFolderDialog),
-            SmallFab(icon: Icons.file_open_outlined, onPressed: showCardDialog),
-          ],
+        floatingActionButton: AnimatedOpacity(
+          opacity: currentPageIndex != 1 ? 1.0 : 0.0,
+          duration: const Duration(milliseconds: 100),
+          child: ExpandableFab(
+            children: [
+              SmallFab(icon: Icons.folder_outlined, onPressed: showFolderDialog),
+              SmallFab(icon: Icons.file_open_outlined, onPressed: showCardDialog),
+            ],
+          ),
         ),
       ),
     );
@@ -85,14 +89,14 @@ class _AppContainerState extends State<AppContainer> {
   showFolderDialog() {
     showDialog(
       context: context,
-      builder: (alertDialogContext) => DeckDialog(providerContext: context, deckId: 0),
+      builder: (alertDialogContext) => DeckDialog(providerContext: context),
     );
   }
 
   showCardDialog() {
     showDialog(
       context: context,
-      builder: (alertDialogContext) => CardDialog(providerContext: context, deckId: 0),
+      builder: (alertDialogContext) => CardDialog(providerContext: context),
     );
   }
 }
