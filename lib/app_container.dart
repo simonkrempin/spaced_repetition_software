@@ -36,7 +36,7 @@ class _AppContainerState extends State<AppContainer> {
           actions: [
             CircleAvatar(
               child: IconButton(
-                icon: const Icon(Icons.person_outlined),
+                icon: const Icon(Icons.person_outlined, color: Colors.white),
                 onPressed: () {},
               ),
             ),
@@ -57,20 +57,20 @@ class _AppContainerState extends State<AppContainer> {
             });
           },
           selectedIndex: currentPageIndex,
-          destinations: const <Widget>[
+          destinations: <Widget>[
             NavigationDestination(
-              selectedIcon: Icon(Icons.folder, color: Colors.white),
-              icon: Icon(Icons.folder_outlined),
+              selectedIcon: Icon(Icons.folder, color: Theme.of(context).colorScheme.primary),
+              icon: const Icon(Icons.folder_outlined),
               label: 'Items',
             ),
             NavigationDestination(
-              selectedIcon: Icon(Icons.play_arrow, color: Colors.white),
-              icon: Icon(Icons.play_arrow_outlined),
+              selectedIcon: Icon(Icons.play_arrow, color: Theme.of(context).colorScheme.primary),
+              icon: const Icon(Icons.play_arrow_outlined),
               label: 'Lernen',
             ),
             NavigationDestination(
-              selectedIcon: Icon(Icons.school, color: Colors.white),
-              icon: Icon(Icons.school_outlined),
+              selectedIcon: Icon(Icons.school, color: Theme.of(context).colorScheme.primary),
+              icon: const Icon(Icons.school_outlined),
               label: 'Shared',
             ),
           ],
