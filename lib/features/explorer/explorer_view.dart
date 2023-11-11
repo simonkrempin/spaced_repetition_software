@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart'
     show
         AsyncSnapshot,
@@ -17,7 +18,7 @@ import 'package:flutter/material.dart'
         Expanded;
 import 'package:spaced_repetition_software/context/explorer_context.dart';
 import 'package:spaced_repetition_software/features/explorer/components/explorer_card_item.dart';
-import 'package:spaced_repetition_software/features/explorer/components/explorer_card.dart';
+import 'package:spaced_repetition_software/features/explorer/components/explorer_deck_item.dart';
 import "package:provider/provider.dart";
 import 'package:spaced_repetition_software/model/deck_content.dart';
 
@@ -57,20 +58,20 @@ class _ExplorerViewState extends State<ExplorerView> {
 
             return Column(
               children: [
-                Expanded(
-                  child: ListView.separated(
-                    separatorBuilder: (context, index) => const SizedBox(height: 8),
-                    itemBuilder: (BuildContext context, int index) => ExplorerDeckItem(deck: decks[index]),
-                    itemCount: decks.length,
-                  ),
+                ListView.separated(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  separatorBuilder: (context, index) => const SizedBox(height: 8),
+                  itemBuilder: (BuildContext context, int index) => ExplorerDeckItem(deck: decks[index]),
+                  itemCount: decks.length,
                 ),
                 if (decks.isNotEmpty && cards.isNotEmpty) const SizedBox(height: 8),
-                Expanded(
-                  child: ListView.separated(
-                    separatorBuilder: (context, index) => const SizedBox(height: 8),
-                    itemBuilder: (BuildContext context, int index) => ExplorerCardItem(card: cards[index]),
-                    itemCount: cards.length,
-                  ),
+                ListView.separated(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  separatorBuilder: (context, index) => const SizedBox(height: 8),
+                  itemBuilder: (BuildContext context, int index) => ExplorerCardItem(card: cards[index]),
+                  itemCount: cards.length,
                 ),
               ],
             );

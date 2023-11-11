@@ -3,12 +3,17 @@ import "package:provider/provider.dart";
 import "package:spaced_repetition_software/context/explorer_context.dart";
 import "package:spaced_repetition_software/services/file_explorer.dart";
 
-class CardDialog extends StatelessWidget {
+class CardDialog extends StatefulWidget {
   final int deckId;
   final BuildContext providerContext;
 
-  CardDialog({ required this.providerContext, required this.deckId, super.key});
+  const CardDialog({required this.providerContext, required this.deckId, super.key});
 
+  @override
+  State<StatefulWidget> createState() => _CardDialogState();
+}
+
+class _CardDialogState extends State<CardDialog> {
   final frontController = TextEditingController();
   final backController = TextEditingController();
 
@@ -16,7 +21,7 @@ class CardDialog extends StatelessWidget {
     var front = frontController.text;
     var back = backController.text;
 
-    addCard(front, back, deckId);
+    addCard(front, back, widget.deckId);
   }
 
   @override
@@ -53,7 +58,7 @@ class CardDialog extends StatelessWidget {
               FilledButton(
                 onPressed: () {
                   saveCard();
-                  providerContext.read<ExplorerContext>().invalidateCache(deckId);
+                  widget.providerContext.read<ExplorerContext>().invalidateCache(widget.deckId);
                   Navigator.of(context).pop();
                 },
                 child: const Text("create"),

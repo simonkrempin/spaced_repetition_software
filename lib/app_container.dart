@@ -27,6 +27,12 @@ class _AppContainerState extends State<AppContainer> {
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.background,
           title: const Text("HOME"),
+          leading: context.watch<ExplorerContext>().deckId != 0
+              ? IconButton(
+                  icon: const Icon(Icons.arrow_back_ios_new),
+                  onPressed: () => context.read<ExplorerContext>().goBackInDeck(),
+                )
+              : null,
           actions: [
             IconButton(
               icon: const Icon(Icons.person_outlined),

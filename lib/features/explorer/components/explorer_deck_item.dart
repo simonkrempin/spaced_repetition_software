@@ -6,12 +6,15 @@ import 'package:spaced_repetition_software/context/explorer_context.dart';
 class ExplorerDeckItem extends StatelessWidget {
   final Deck deck;
 
-  const ExplorerDeckItem({ required this.deck, super.key});
+  const ExplorerDeckItem({required this.deck, super.key});
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: const CircleAvatar(child: Text('A')),
+      leading: CircleAvatar(
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        child: const Icon(Icons.folder_outlined, color: Colors.white),
+      ),
       title: Text(deck.name),
       trailing: const Icon(Icons.more_vert),
       onTap: () {

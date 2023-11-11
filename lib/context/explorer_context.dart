@@ -11,20 +11,34 @@ class ExplorerContext with ChangeNotifier {
   late int _deckId;
   final Map<int, DeckContent> _deckCache = {};
   final Map<int, bool> _deckCacheValidState = {};
+  final List<int> _deckIdTrace = [];
 
-  int get deckId => _deckId;
+  int get deckId {
+    if (_deckIdTrace.isEmpty) {
+      return 0;
+    }
+
+    return _deckIdTrace.last;
+  }
+
   set deckId(int value) {
-    _deckId = value;
+    _deckIdTrace.add(value);
+    notifyListeners();
+  }
+
+  void goBackInDeck() {
+    _deckIdTrace.removeLast();
     notifyListeners();
   }
 
   void invalidateCache(int deckId) {
     _deckCacheValidState[deckId] = false;
+    notifyListeners();
   }
 
   Future<DeckContent> getDeckContent() async {
-    if (_deckCache.containsKey(_deckId) && _deckCacheValidState[_deckId]!) {
-      return _deckCache[_deckId]!;
+    if (_deckCache.containsKey(deckId) && _deckCacheValidState[deckId]!) {
+      return _deckCache[deckId]!;
     }
 
     return _fetchData();

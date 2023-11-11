@@ -13,7 +13,7 @@ checkForTables() async {
         front TEXT,
         back TEXT,
         deck_id INTEGER,
-        repeat_next DateTime,
+        repeat_next TEXT,
         repeat_last INTEGER
       )""");
   }
