@@ -1,33 +1,45 @@
-import "package:flutter/material.dart";
+import "package:flutter/material.dart"
+    show AlertDialog, BuildContext, Column, FilledButton, InputDecoration, MainAxisAlignment, MainAxisSize, Navigator, OutlineInputBorder, Row, SizedBox, State, StatefulWidget, Text, TextButton, TextEditingController, TextField, VoidCallback, Widget;
 import "package:provider/provider.dart";
 import "package:spaced_repetition_software/context/explorer_context.dart";
 import "package:spaced_repetition_software/services/file_explorer.dart";
+import "package:spaced_repetition_software/model/card.dart";
+
+typedef SaveCallback = void Function(String front, String back);
 
 class CardDialog extends StatefulWidget {
   final BuildContext providerContext;
+  final Card? card;
+  final SaveCallback? onSaved;
 
-  const CardDialog({required this.providerContext, super.key});
+  const CardDialog({
+    this.card,
+    this.onSaved,
+    required this.providerContext,
+    super.key,
+  });
 
   @override
   State<StatefulWidget> createState() => _CardDialogState();
 }
 
 class _CardDialogState extends State<CardDialog> {
-  final frontController = TextEditingController();
-  final backController = TextEditingController();
-  late final int deckId;
+  late final frontController = TextEditingController(text: widget.card != null ? widget.card!.front : "");
+  late final backController = TextEditingController(text: widget.card != null ? widget.card!.back : "");
+  late final int deckId = widget.providerContext
+      .read<ExplorerContext>()
+      .deckId;
 
   void saveCard() {
     var front = frontController.text;
     var back = backController.text;
 
-    addCard(front, back, deckId);
+    widget.onSaved == null ? addCard(front, back, deckId) : widget.onSaved!(front, back);
   }
 
   @override
   void initState() {
     super.initState();
-    deckId = widget.providerContext.read<ExplorerContext>().deckId;
   }
 
   @override
@@ -67,7 +79,7 @@ class _CardDialogState extends State<CardDialog> {
                   widget.providerContext.read<ExplorerContext>().invalidateCache(deckId);
                   Navigator.of(context).pop();
                 },
-                child: const Text("create"),
+                child: Text(widget.onSaved == null ? "create" : "save"),
               ),
             ],
           )

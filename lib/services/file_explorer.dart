@@ -57,3 +57,12 @@ addDeck(String name, int parentId) async {
   var db = await DBConnector.getConnection();
   await db.insert("deck", {"name": name, "parent_id": parentId});
 }
+
+updateCard(Card card) async {
+  var db = await DBConnector.getConnection();
+  await db.update("card", {
+    "front": card.front,
+    "back": card.back,
+    "deck_id": card.deckId
+  }, where: "id = ${card.id}");
+}

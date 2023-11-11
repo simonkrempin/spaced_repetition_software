@@ -1,4 +1,4 @@
-import "package:provider/provider.dart" ;
+import "package:provider/provider.dart";
 import "package:flutter/material.dart" show ChangeNotifier;
 import "dart:async";
 
@@ -27,8 +27,10 @@ class ExplorerContext with ChangeNotifier {
   }
 
   void goBackInDeck() {
-    _deckIdTrace.removeLast();
-    notifyListeners();
+    if (_deckIdTrace.isNotEmpty) {
+      _deckIdTrace.removeLast();
+      notifyListeners();
+    }
   }
 
   void invalidateCache(int deckId) {

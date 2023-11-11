@@ -18,7 +18,6 @@ class _DeckDialogState extends State<DeckDialog> {
 
   void saveDeck() {
     var name = nameController.text;
-    print(deckId);
     addDeck(name, deckId);
   }
 

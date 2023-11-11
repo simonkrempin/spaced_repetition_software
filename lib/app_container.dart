@@ -34,10 +34,13 @@ class _AppContainerState extends State<AppContainer> {
                 )
               : null,
           actions: [
-            IconButton(
-              icon: const Icon(Icons.person_outlined),
-              onPressed: () {},
+            CircleAvatar(
+              child: IconButton(
+                icon: const Icon(Icons.person_outlined),
+                onPressed: () {},
+              ),
             ),
+            const SizedBox(width: 16)
           ],
         ),
         body: <Widget>[
