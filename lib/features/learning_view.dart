@@ -63,7 +63,7 @@ class _LearningViewState extends State<LearningView> {
                     );
                   },
                   onStackFinished: () {
-                    Navigator.of(context).pop();
+
                   },
                 ),
               );
@@ -99,10 +99,15 @@ class _LearningViewState extends State<LearningView> {
 
     try {
       var result = await getCardsToLearn();
-      print(result.length);
       for (var card in result) {
         swipeItems.add(SwipeItem(
           content: card,
+          likeAction: () {
+            cardContentKnown(card);
+          },
+          nopeAction: () {
+            cardContentUnknown(card.id!);
+          }
         ));
       }
     } catch (e) {

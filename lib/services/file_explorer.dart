@@ -1,6 +1,7 @@
 import 'package:spaced_repetition_software/model/deck.dart';
 import '../model/card.dart';
 import 'db_connector.dart';
+import "package:intl/intl.dart";
 
 checkForTables() async {
   var db = await DBConnector.getConnection();
@@ -33,12 +34,13 @@ Future<List<Deck>> getDecks(int parentId) async {
 Future<List<Card>> getCards(int deckId) async {
   var db = await DBConnector.getConnection();
   var cards = await db.query("card", where: "deck_id = $deckId");
+
   return cards.map((f) => Card.fromMap(f)).toList();
 }
 
 Future<List<Card>> getCardsToLearn() async {
   var db = await DBConnector.getConnection();
-  var cards = await db.query("card", where: "repeat_next <= CURRENT_TIMESTAMP", orderBy: "repeat_last ASC");
+  var cards = await db.query("card", where: "repeat_next <= date(CURRENT_TIMESTAMP)", orderBy: "repeat_last ASC");
   return cards.map((f) => Card.fromMap(f)).toList();
 }
 
@@ -48,7 +50,7 @@ addCard(String front, String back, int deckId) async {
     "front": front,
     "back": back,
     "deck_id": deckId,
-    "repeat_next": DateTime.now().toIso8601String().replaceAll("T", " "),
+    "repeat_next": _getCurrentDate(),
     "repeat_last": 0
   });
 }
@@ -65,4 +67,26 @@ updateCard(Card card) async {
     "back": card.back,
     "deck_id": card.deckId
   }, where: "id = ${card.id}");
+}
+
+cardContentUnknown(int cardId) async {
+  var db = await DBConnector.getConnection();
+  await db.update("card", {
+    "repeat_next": _getCurrentDate(),
+    "repeat_last": 0
+  }, where: "id = $cardId");
+}
+
+cardContentKnown(Card card) async {
+  var db = await DBConnector.getConnection();
+  var nextRepeat = card.repeatLast != 0 ? card.repeatLast * 2 : 1;
+  await db.update("card", {
+    "repeat_next": _getCurrentDate(daysToAdd: nextRepeat),
+    "repeat_last": nextRepeat
+  }, where: "id = ${card.id}");
+}
+
+String _getCurrentDate({int daysToAdd = 0}) {
+  DateFormat formatter = DateFormat("yyyy-MM-dd");
+  return formatter.format(DateTime.now().add(Duration(days: daysToAdd)));
 }
