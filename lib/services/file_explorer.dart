@@ -36,10 +36,10 @@ Future<List<Card>> getCards(int deckId) async {
   return cards.map((f) => Card.fromMap(f)).toList();
 }
 
-getCardsToLearn() async {
+Future<List<Card>> getCardsToLearn() async {
   var db = await DBConnector.getConnection();
-  var cards = await db.query("card", where: "repeat_next <= CURRENT_TIMESTAMP");
-  return cards;
+  var cards = await db.query("card", where: "repeat_next <= CURRENT_TIMESTAMP", orderBy: "repeat_last ASC");
+  return cards.map((f) => Card.fromMap(f)).toList();
 }
 
 addCard(String front, String back, int deckId) async {
@@ -48,7 +48,7 @@ addCard(String front, String back, int deckId) async {
     "front": front,
     "back": back,
     "deck_id": deckId,
-    "repeat_next": DateTime.now().toIso8601String(),
+    "repeat_next": DateTime.now().toIso8601String().replaceAll("T", " "),
     "repeat_last": 0
   });
 }
