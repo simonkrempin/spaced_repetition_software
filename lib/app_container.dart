@@ -25,13 +25,18 @@ class _AppContainerState extends State<AppContainer> {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.background,
+          backgroundColor: Theme
+              .of(context)
+              .colorScheme
+              .background,
           title: const Text("HOME"),
-          leading: context.watch<ExplorerContext>().deckId != 0
+          leading: context
+              .watch<ExplorerContext>()
+              .deckId != 0
               ? IconButton(
-                  icon: const Icon(Icons.arrow_back_ios_new),
-                  onPressed: () => context.read<ExplorerContext>().goBackInDeck(),
-                )
+            icon: const Icon(Icons.arrow_back_ios_new),
+            onPressed: () => context.read<ExplorerContext>().goBackInDeck(),
+          )
               : null,
           actions: [
             CircleAvatar(
@@ -49,27 +54,46 @@ class _AppContainerState extends State<AppContainer> {
           const OnlineView(),
         ][currentPageIndex],
         bottomNavigationBar: NavigationBar(
-          backgroundColor: Theme.of(context).colorScheme.background,
-          indicatorColor: Theme.of(context).colorScheme.primaryContainer,
+          backgroundColor: Theme
+              .of(context)
+              .colorScheme
+              .background,
+          indicatorColor: Theme
+              .of(context)
+              .colorScheme
+              .primaryContainer,
           onDestinationSelected: (int index) {
-            setState(() {
-              currentPageIndex = index;
-            });
+            if (currentPageIndex == index) {
+              destinationAction(context);
+            } else {
+              setState(() {
+                currentPageIndex = index;
+              });
+            }
           },
           selectedIndex: currentPageIndex,
           destinations: <Widget>[
             NavigationDestination(
-              selectedIcon: Icon(Icons.folder, color: Theme.of(context).colorScheme.primary),
+              selectedIcon: Icon(Icons.folder, color: Theme
+                  .of(context)
+                  .colorScheme
+                  .primary),
               icon: const Icon(Icons.folder_outlined),
               label: 'Items',
             ),
             NavigationDestination(
-              selectedIcon: Icon(Icons.play_arrow, color: Theme.of(context).colorScheme.primary),
+              selectedIcon: Icon(Icons.play_arrow, color: Theme
+                  .of(context)
+                  .colorScheme
+                  .primary),
               icon: const Icon(Icons.play_arrow_outlined),
               label: 'Lernen',
             ),
             NavigationDestination(
-              selectedIcon: Icon(Icons.school, color: Theme.of(context).colorScheme.primary),
+              selectedIcon: Icon(Icons.school, color: Theme
+                  .of(context)
+                  .colorScheme
+                  .primary),
               icon: const Icon(Icons.school_outlined),
               label: 'Shared',
             ),
@@ -101,5 +125,17 @@ class _AppContainerState extends State<AppContainer> {
       context: context,
       builder: (alertDialogContext) => CardDialog(providerContext: context),
     );
+  }
+
+  void destinationAction(BuildContext context) {
+    switch (currentPageIndex) {
+      case 0:
+        context.read<ExplorerContext>().deckId = 0;
+        break;
+      case 1:
+        break;
+      case 2:
+        break;
+    }
   }
 }
