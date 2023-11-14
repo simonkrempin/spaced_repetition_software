@@ -31,8 +31,12 @@ class ExplorerContext with ChangeNotifier {
     }
   }
 
-  void invalidateCache([int deckId = 0]) {
-    _deckCacheValidState[deckId] = false;
+  void invalidateCache([int deckId = -1]) {
+    if (deckId == -1) {
+      _deckCacheValidState[this.deckId] = false;
+    } else {
+      _deckCacheValidState[deckId] = false;
+    }
     notifyListeners();
   }
 
