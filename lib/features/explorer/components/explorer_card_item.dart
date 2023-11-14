@@ -12,7 +12,7 @@ import "package:flutter/material.dart"
         Colors,
         Theme,
         Widget,
-        VoidCallback,
+        IconButton,
         showDialog;
 import "package:spaced_repetition_software/dialog/card_dialog.dart";
 import "package:spaced_repetition_software/model/card.dart";
@@ -31,7 +31,12 @@ class ExplorerCardItem extends StatelessWidget {
         child: const Icon(Icons.file_copy_outlined, color: Colors.white),
       ),
       title: Text(card.front),
-      trailing: const Icon(Icons.more_vert),
+      trailing: IconButton(
+        icon: const Icon(Icons.more_vert),
+        onPressed: () {
+          showEditingDialog(context);
+        },
+      ),
       onTap: () => showEditingDialog(context),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       tileColor: Theme.of(context).cardColor,
