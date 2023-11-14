@@ -1,14 +1,12 @@
-import "package:provider/provider.dart";
 import "package:flutter/material.dart" show ChangeNotifier;
 import "dart:async";
 
 import "package:spaced_repetition_software/model/deck.dart";
 import "package:spaced_repetition_software/model/card.dart";
 import "package:spaced_repetition_software/model/deck_content.dart";
-import "package:spaced_repetition_software/services/file_explorer.dart";
+import "package:spaced_repetition_software/database/deck_card_repository.dart";
 
 class ExplorerContext with ChangeNotifier {
-  late int _deckId;
   final Map<int, DeckContent> _deckCache = {};
   final Map<int, bool> _deckCacheValidState = {};
   final List<int> _deckIdTrace = [];
@@ -33,8 +31,12 @@ class ExplorerContext with ChangeNotifier {
     }
   }
 
-  void invalidateCache(int deckId) {
-    _deckCacheValidState[deckId] = false;
+  void invalidateCache([int deckId = -1]) {
+    if (deckId == -1) {
+      _deckCacheValidState[this.deckId] = false;
+    } else {
+      _deckCacheValidState[deckId] = false;
+    }
     notifyListeners();
   }
 
@@ -63,9 +65,5 @@ class ExplorerContext with ChangeNotifier {
     });
 
     return completer.future;
-  }
-
-  ExplorerContext({required int deckId}) {
-    _deckId = deckId;
   }
 }

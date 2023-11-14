@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spaced_repetition_software/dialog/deck_dialog.dart';
 import 'package:spaced_repetition_software/model/deck.dart';
+import 'package:spaced_repetition_software/model/card.dart' as models;
 import 'package:spaced_repetition_software/context/explorer_context.dart';
-import 'package:spaced_repetition_software/services/file_explorer.dart';
+import 'package:spaced_repetition_software/database/deck_card_repository.dart';
+import 'package:spaced_repetition_software/services/card_deck_service.dart';
 
 class ExplorerDeckItem extends StatelessWidget {
   final Deck deck;
@@ -12,7 +14,7 @@ class ExplorerDeckItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
+    var listTile = ListTile(
       leading: CircleAvatar(
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
         child: const Icon(
@@ -32,6 +34,28 @@ class ExplorerDeckItem extends StatelessWidget {
       },
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       tileColor: Theme.of(context).cardColor,
+    );
+
+    return LongPressDraggable(
+      data: deck,
+      feedback: SizedBox(
+        width: MediaQuery.of(context).size.width - 16,
+        height: 64,
+        child: Card(child: listTile),
+      ),
+      child: DragTarget(
+        builder: (context, candidateData, rejectedItems) => listTile,
+        onAccept: (droppedItem) {
+          if (droppedItem is Deck) {
+            if (droppedItem.id == deck.id) return;
+            moveDeck(context, deck, droppedItem);
+          } else if (droppedItem is models.Card) {
+            moveCard(context, deck, droppedItem);
+          } else {
+            throw Exception("Unknown type");
+          }
+        },
+      ),
     );
   }
 

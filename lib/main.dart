@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
 import "package:spaced_repetition_software/app_container.dart";
 import 'package:spaced_repetition_software/context/explorer_context.dart';
-import "package:spaced_repetition_software/services/db_connector.dart";
-import "package:spaced_repetition_software/services/file_explorer.dart";
+import "package:spaced_repetition_software/database/db_connector.dart";
+import "package:spaced_repetition_software/database/deck_card_repository.dart";
 import "package:provider/provider.dart";
 
 void main() async {
@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: ChangeNotifierProvider(
-        create: (_) => ExplorerContext(deckId: 0),
+        create: (_) => ExplorerContext(),
         child: const AppContainer(),
       )
     );

@@ -14,17 +14,14 @@ import 'package:flutter/material.dart'
         StatefulWidget,
         Text,
         Widget,
-        Column,
-        Expanded;
+        Column;
+import "package:provider/provider.dart";
 import 'package:spaced_repetition_software/context/explorer_context.dart';
 import 'package:spaced_repetition_software/features/explorer/components/explorer_card_item.dart';
 import 'package:spaced_repetition_software/features/explorer/components/explorer_deck_item.dart';
-import "package:provider/provider.dart";
 import 'package:spaced_repetition_software/model/deck_content.dart';
-
-import '../../model/deck.dart';
-import "../../services/file_explorer.dart";
-import '../../model/card.dart';
+import 'package:spaced_repetition_software/model/deck.dart';
+import 'package:spaced_repetition_software/model/card.dart';
 
 class ExplorerView extends StatefulWidget {
   const ExplorerView({super.key});

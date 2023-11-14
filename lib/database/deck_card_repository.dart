@@ -1,7 +1,7 @@
 import 'package:spaced_repetition_software/model/deck.dart';
-import '../model/card.dart';
-import 'db_connector.dart';
-import "package:intl/intl.dart";
+import 'package:spaced_repetition_software/utils/date.dart';
+import 'package:spaced_repetition_software/model/card.dart';
+import 'package:spaced_repetition_software/database/db_connector.dart';
 
 checkForTables() async {
   var db = await DBConnector.getConnection();
@@ -50,7 +50,7 @@ addCard(String front, String back, int deckId) async {
     "front": front,
     "back": back,
     "deck_id": deckId,
-    "repeat_next": _getCurrentDate(),
+    "repeat_next": getCurrentDate(),
     "repeat_last": 0
   });
 }
@@ -77,7 +77,7 @@ updateDeck(Deck deck) async {
 cardContentUnknown(int cardId) async {
   var db = await DBConnector.getConnection();
   await db.update("card", {
-    "repeat_next": _getCurrentDate(),
+    "repeat_next": getCurrentDate(),
     "repeat_last": 0
   }, where: "id = $cardId");
 }
@@ -86,12 +86,8 @@ cardContentKnown(Card card) async {
   var db = await DBConnector.getConnection();
   var nextRepeat = card.repeatLast != 0 ? card.repeatLast * 2 : 1;
   await db.update("card", {
-    "repeat_next": _getCurrentDate(daysToAdd: nextRepeat),
+    "repeat_next": getCurrentDate(daysToAdd: nextRepeat),
     "repeat_last": nextRepeat
   }, where: "id = ${card.id}");
 }
 
-String _getCurrentDate({int daysToAdd = 0}) {
-  DateFormat formatter = DateFormat("yyyy-MM-dd");
-  return formatter.format(DateTime.now().add(Duration(days: daysToAdd)));
-}
