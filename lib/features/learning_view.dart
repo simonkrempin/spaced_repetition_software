@@ -6,7 +6,6 @@ import 'package:flutter/material.dart'
         CircularProgressIndicator,
         Container,
         FutureBuilder,
-        Navigator,
         State,
         StatefulWidget,
         Text,

@@ -1,24 +1,29 @@
 import "package:flutter/material.dart";
 import "package:provider/provider.dart";
 import "package:spaced_repetition_software/context/explorer_context.dart";
+import "package:spaced_repetition_software/model/deck.dart";
 import "package:spaced_repetition_software/services/file_explorer.dart";
+
+typedef SaveFunction = void Function(String name);
 
 class DeckDialog extends StatefulWidget {
   final BuildContext providerContext;
+  final Deck? deck;
+  final SaveFunction? onSaved;
 
-  const DeckDialog({ required this.providerContext, super.key});
+  const DeckDialog({ this.deck, this.onSaved, required this.providerContext, super.key});
 
   @override
   State<StatefulWidget> createState() => _DeckDialogState();
 }
 
 class _DeckDialogState extends State<DeckDialog> {
-  final nameController = TextEditingController();
+  late final nameController = TextEditingController(text: widget.deck != null ? widget.deck!.name : "");
   late final int deckId;
 
   void saveDeck() {
     var name = nameController.text;
-    addDeck(name, deckId);
+    widget.onSaved != null ? widget.onSaved!(name) : addDeck(name, deckId);
   }
 
   @override
@@ -62,7 +67,7 @@ class _DeckDialogState extends State<DeckDialog> {
                   widget.providerContext.read<ExplorerContext>().invalidateCache(deckId);
                   Navigator.of(context).pop();
                 },
-                child: const Text("create"),
+                child: Text(widget.onSaved != null ? "save" : "create"),
               ),
             ],
           )

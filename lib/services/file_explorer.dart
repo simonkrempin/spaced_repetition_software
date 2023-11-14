@@ -69,6 +69,11 @@ updateCard(Card card) async {
   }, where: "id = ${card.id}");
 }
 
+updateDeck(Deck deck) async {
+  var db = await DBConnector.getConnection();
+  await db.update("deck", {"name": deck.name, "parent_id": deck.parentId}, where: "id = ${deck.id}");
+}
+
 cardContentUnknown(int cardId) async {
   var db = await DBConnector.getConnection();
   await db.update("card", {
