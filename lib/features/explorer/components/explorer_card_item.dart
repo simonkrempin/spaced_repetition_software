@@ -14,7 +14,10 @@ class ExplorerCardItem extends StatelessWidget {
     var listTile = ListTile(
       leading: CircleAvatar(
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-        child: const Icon(Icons.file_copy_outlined, color: Colors.white),
+        child: const Icon(
+          Icons.file_copy_outlined,
+          color: Colors.white,
+        ),
       ),
       title: Text(card.front),
       trailing: IconButton(
