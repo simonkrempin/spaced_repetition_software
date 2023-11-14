@@ -18,7 +18,7 @@ import 'package:flutter/material.dart'
         BorderRadius,
         BoxDecoration;
 import 'package:spaced_repetition_software/model/card.dart';
-import 'package:spaced_repetition_software/services/file_explorer.dart';
+import 'package:spaced_repetition_software/database/deck_card_repository.dart';
 import 'package:swipe_cards/swipe_cards.dart';
 import 'package:flip_card/flip_card.dart';
 import "dart:async";

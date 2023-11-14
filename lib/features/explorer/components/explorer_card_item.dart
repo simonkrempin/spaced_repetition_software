@@ -1,31 +1,17 @@
-import "package:flutter/material.dart"
-    show
-        BorderRadius,
-        BuildContext,
-        CircleAvatar,
-        Icon,
-        Icons,
-        ListTile,
-        RoundedRectangleBorder,
-        StatelessWidget,
-        Text,
-        Colors,
-        Theme,
-        Widget,
-        IconButton,
-        showDialog;
+import "package:flutter/cupertino.dart";
+import "package:flutter/material.dart";
 import "package:spaced_repetition_software/dialog/card_dialog.dart";
-import "package:spaced_repetition_software/model/card.dart";
-import "package:spaced_repetition_software/services/file_explorer.dart";
+import "package:spaced_repetition_software/model/card.dart" as models;
+import "package:spaced_repetition_software/database/deck_card_repository.dart";
 
 class ExplorerCardItem extends StatelessWidget {
-  final Card card;
+  final models.Card card;
 
   const ExplorerCardItem({required this.card, super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
+    var listTile = ListTile(
       leading: CircleAvatar(
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
         child: const Icon(Icons.file_copy_outlined, color: Colors.white),
@@ -40,6 +26,16 @@ class ExplorerCardItem extends StatelessWidget {
       onTap: () => showEditingDialog(context),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       tileColor: Theme.of(context).cardColor,
+    );
+
+    return LongPressDraggable(
+      data: card,
+      feedback: SizedBox(
+        width: MediaQuery.of(context).size.width - 16,
+        height: 64,
+        child: Card(child: listTile),
+      ),
+      child: listTile,
     );
   }
 

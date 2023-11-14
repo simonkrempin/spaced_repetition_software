@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:spaced_repetition_software/dialog/deck_dialog.dart';
 import 'package:spaced_repetition_software/model/deck.dart';
 import 'package:spaced_repetition_software/context/explorer_context.dart';
-import 'package:spaced_repetition_software/services/file_explorer.dart';
+import 'package:spaced_repetition_software/database/deck_card_repository.dart';
 
 class ExplorerDeckItem extends StatelessWidget {
   final Deck deck;

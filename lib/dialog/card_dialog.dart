@@ -1,8 +1,26 @@
 import "package:flutter/material.dart"
-    show AlertDialog, BuildContext, Column, FilledButton, InputDecoration, MainAxisAlignment, MainAxisSize, Navigator, OutlineInputBorder, Row, SizedBox, State, StatefulWidget, Text, TextButton, TextEditingController, TextField, VoidCallback, Widget;
+    show
+        AlertDialog,
+        BuildContext,
+        Column,
+        FilledButton,
+        InputDecoration,
+        MainAxisAlignment,
+        MainAxisSize,
+        Navigator,
+        OutlineInputBorder,
+        Row,
+        SizedBox,
+        State,
+        StatefulWidget,
+        Text,
+        TextButton,
+        TextEditingController,
+        TextField,
+        Widget;
 import "package:provider/provider.dart";
 import "package:spaced_repetition_software/context/explorer_context.dart";
-import "package:spaced_repetition_software/services/file_explorer.dart";
+import "package:spaced_repetition_software/database/deck_card_repository.dart";
 import "package:spaced_repetition_software/model/card.dart";
 
 typedef SaveCallback = void Function(String front, String back);
@@ -26,9 +44,7 @@ class CardDialog extends StatefulWidget {
 class _CardDialogState extends State<CardDialog> {
   late final frontController = TextEditingController(text: widget.card != null ? widget.card!.front : "");
   late final backController = TextEditingController(text: widget.card != null ? widget.card!.back : "");
-  late final int deckId = widget.providerContext
-      .read<ExplorerContext>()
-      .deckId;
+  late final int deckId = widget.providerContext.read<ExplorerContext>().deckId;
 
   void saveCard() {
     var front = frontController.text;
