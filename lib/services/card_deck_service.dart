@@ -18,3 +18,36 @@ void moveDeck(BuildContext context, Deck targetDeck, Deck droppedDeck) async {
   context.read<ExplorerContext>().invalidateCache(targetDeck.id);
   context.read<ExplorerContext>().invalidateCache();
 }
+
+void deleteCard(BuildContext context, Card card) async {
+  await deleteCardById(card.id!);
+
+  // I am not sure if this is right here because the cache should be invalidated for all decks even if the widget is not
+  // mounted anymore. But I assume the context for the provider stays mounted, which makes this check valid.
+  if (context.mounted) {
+    context.read<ExplorerContext>().invalidateCache();
+  }
+}
+
+void deleteDeck(BuildContext context, Deck parentDeck) async {
+  Future<List<int>> collectDeckIds(int deckId) async {
+    List<int> collectedIds = [deckId];
+    var subDecks = await getDecks(deckId);
+    for (var subDeck in subDecks) {
+      collectedIds.addAll(await collectDeckIds(subDeck.id));
+    }
+    return collectedIds;
+  }
+
+  List<int> allDeckIds = await collectDeckIds(parentDeck.id);
+
+  await Future.wait([
+    ...allDeckIds.map(deleteDeckById),
+    ...allDeckIds.map(deleteCardsByDeckId),
+  ]);
+
+  // same here
+  if (context.mounted) {
+    context.read<ExplorerContext>().invalidateCache();
+  }
+}

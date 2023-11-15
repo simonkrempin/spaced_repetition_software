@@ -69,12 +69,12 @@ updateCard(Card card) async {
   }, where: "id = ${card.id}");
 }
 
-updateDeck(Deck deck) async {
+Future<void> updateDeck(Deck deck) async {
   var db = await DBConnector.getConnection();
   await db.update("deck", {"name": deck.name, "parent_id": deck.parentId}, where: "id = ${deck.id}");
 }
 
-cardContentUnknown(int cardId) async {
+Future<void> cardContentUnknown(int cardId) async {
   var db = await DBConnector.getConnection();
   await db.update("card", {
     "repeat_next": getCurrentDate(),
@@ -82,7 +82,7 @@ cardContentUnknown(int cardId) async {
   }, where: "id = $cardId");
 }
 
-cardContentKnown(Card card) async {
+Future<void> cardContentKnown(Card card) async {
   var db = await DBConnector.getConnection();
   var nextRepeat = card.repeatLast != 0 ? card.repeatLast * 2 : 1;
   await db.update("card", {
@@ -91,3 +91,17 @@ cardContentKnown(Card card) async {
   }, where: "id = ${card.id}");
 }
 
+Future<void> deleteCardById(int cardId) async {
+  var db = await DBConnector.getConnection();
+  await db.delete("card", where: "id = $cardId");
+}
+
+Future<void> deleteDeckById(int deckId) async {
+  var db = await DBConnector.getConnection();
+  await db.delete("deck", where: "id = $deckId");
+}
+
+Future<void> deleteCardsByDeckId(int deckId) async {
+  var db = await DBConnector.getConnection();
+  await db.delete("card", where: "deck_id = $deckId");
+}

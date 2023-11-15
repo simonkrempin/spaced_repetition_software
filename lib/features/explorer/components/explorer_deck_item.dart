@@ -23,11 +23,17 @@ class ExplorerDeckItem extends StatelessWidget {
         ),
       ),
       title: Text(deck.name),
-      trailing: IconButton(
-        icon: const Icon(Icons.more_vert),
-        onPressed: () {
-          showEditingDialog(context);
-        },
+      trailing: MenuAnchor(
+        menuChildren: [
+          MenuItemButton(child: const Text("Delete"), onPressed: () => deleteDeck(context, deck)),
+          MenuItemButton(child: const Text("Edit Deck"), onPressed: () => showEditingDialog(context))
+        ],
+        builder: (BuildContext context, MenuController controller, Widget? child) => IconButton(
+          icon: const Icon(Icons.more_vert),
+          onPressed: () {
+            controller.isOpen ? controller.close() : controller.open();
+          },
+        ),
       ),
       onTap: () {
         context.read<ExplorerContext>().deckId = deck.id;

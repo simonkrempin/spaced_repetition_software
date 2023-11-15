@@ -1,8 +1,8 @@
-import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
 import "package:spaced_repetition_software/dialog/card_dialog.dart";
 import "package:spaced_repetition_software/model/card.dart" as models;
 import "package:spaced_repetition_software/database/deck_card_repository.dart";
+import "package:spaced_repetition_software/services/card_deck_service.dart";
 
 class ExplorerCardItem extends StatelessWidget {
   final models.Card card;
@@ -20,11 +20,16 @@ class ExplorerCardItem extends StatelessWidget {
         ),
       ),
       title: Text(card.front),
-      trailing: IconButton(
-        icon: const Icon(Icons.more_vert),
-        onPressed: () {
-          showEditingDialog(context);
-        },
+      trailing: MenuAnchor(
+        menuChildren: [
+          MenuItemButton(child: const Text("Delete"), onPressed: () => deleteCard(context, card)),
+        ],
+        builder: (BuildContext context, MenuController controller, Widget? child) => IconButton(
+          icon: const Icon(Icons.more_vert),
+          onPressed: () {
+            controller.isOpen ? controller.close() : controller.open();
+          },
+        ),
       ),
       onTap: () => showEditingDialog(context),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -56,4 +61,6 @@ class ExplorerCardItem extends StatelessWidget {
       ),
     );
   }
+
+  void showContextMenu() {}
 }
