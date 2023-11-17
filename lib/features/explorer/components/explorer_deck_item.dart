@@ -36,7 +36,7 @@ class ExplorerDeckItem extends StatelessWidget {
         ),
       ),
       onTap: () {
-        context.read<ExplorerContext>().deckId = deck.id;
+        context.read<ExplorerContext>().deck = deck;
       },
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       tileColor: Theme.of(context).cardColor,

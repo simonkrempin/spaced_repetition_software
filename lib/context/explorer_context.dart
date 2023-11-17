@@ -9,24 +9,38 @@ import "package:spaced_repetition_software/database/deck_card_repository.dart";
 class ExplorerContext with ChangeNotifier {
   final Map<int, DeckContent> _deckCache = {};
   final Map<int, bool> _deckCacheValidState = {};
-  final List<int> _deckIdTrace = [];
+  final List<Deck> _deckTrace = [Deck(id: 0, parentId: 0, name: "Home")];
 
   int get deckId {
-    if (_deckIdTrace.isEmpty) {
-      return 0;
-    }
-
-    return _deckIdTrace.last;
+    return _deckTrace.last.id;
   }
 
-  set deckId(int value) {
-    _deckIdTrace.add(value);
+  String get deckName {
+    return _deckTrace.last.name;
+  }
+
+  Deck get parentDeck {
+    if (_deckTrace.length > 1) {
+      return _deckTrace[_deckTrace.length - 2];
+    }
+
+    return _deckTrace.last;
+  }
+
+  set deck (Deck deckToAdd) {
+    _deckTrace.add(deckToAdd);
+    notifyListeners();
+  }
+
+  void returnHome() {
+    _deckTrace.clear();
+    _deckTrace.add(Deck(id: 0, parentId: 0, name: "Home"));
     notifyListeners();
   }
 
   void goBackInDeck() {
-    if (_deckIdTrace.isNotEmpty) {
-      _deckIdTrace.removeLast();
+    if (_deckTrace.length > 1) {
+      _deckTrace.removeLast();
       notifyListeners();
     }
   }

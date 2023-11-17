@@ -8,6 +8,9 @@ import "package:spaced_repetition_software/features/learning_view.dart";
 import "package:spaced_repetition_software/features/online_view.dart";
 import 'package:spaced_repetition_software/context/explorer_context.dart';
 import "package:provider/provider.dart";
+import "package:spaced_repetition_software/model/deck.dart";
+import "package:spaced_repetition_software/model/card.dart" as models;
+import "package:spaced_repetition_software/services/card_deck_service.dart";
 
 class AppContainer extends StatefulWidget {
   const AppContainer({super.key});
@@ -25,18 +28,27 @@ class _AppContainerState extends State<AppContainer> {
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Theme
-              .of(context)
-              .colorScheme
-              .background,
-          title: const Text("HOME"),
-          leading: context
-              .watch<ExplorerContext>()
-              .deckId != 0
+          backgroundColor: Theme.of(context).colorScheme.background,
+          title: DragTarget(
+            builder: (context, candidateData, rejectedItems) => Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: Text(context.read<ExplorerContext>().deckName, style: const TextStyle(color: Colors.white)),
+            ),
+            onAccept: (droppedItem) {
+              if (droppedItem is Deck) {
+                moveDeck(context, context.read<ExplorerContext>().parentDeck, droppedItem);
+              } else if (droppedItem is models.Card) {
+                moveCard(context, context.read<ExplorerContext>().parentDeck, droppedItem);
+              } else {
+                throw Exception("Unknown dropped item type");
+              }
+            },
+          ),
+          leading: context.watch<ExplorerContext>().deckId != 0
               ? IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new),
-            onPressed: () => context.read<ExplorerContext>().goBackInDeck(),
-          )
+                  icon: const Icon(Icons.arrow_back_ios_new),
+                  onPressed: () => context.read<ExplorerContext>().goBackInDeck(),
+                )
               : null,
           actions: [
             CircleAvatar(
@@ -54,14 +66,8 @@ class _AppContainerState extends State<AppContainer> {
           const OnlineView(),
         ][currentPageIndex],
         bottomNavigationBar: NavigationBar(
-          backgroundColor: Theme
-              .of(context)
-              .colorScheme
-              .background,
-          indicatorColor: Theme
-              .of(context)
-              .colorScheme
-              .primaryContainer,
+          backgroundColor: Theme.of(context).colorScheme.background,
+          indicatorColor: Theme.of(context).colorScheme.primaryContainer,
           onDestinationSelected: (int index) {
             if (currentPageIndex == index) {
               destinationAction(context);
@@ -74,26 +80,17 @@ class _AppContainerState extends State<AppContainer> {
           selectedIndex: currentPageIndex,
           destinations: <Widget>[
             NavigationDestination(
-              selectedIcon: Icon(Icons.folder, color: Theme
-                  .of(context)
-                  .colorScheme
-                  .primary),
+              selectedIcon: Icon(Icons.folder, color: Theme.of(context).colorScheme.primary),
               icon: const Icon(Icons.folder_outlined),
               label: 'Items',
             ),
             NavigationDestination(
-              selectedIcon: Icon(Icons.play_arrow, color: Theme
-                  .of(context)
-                  .colorScheme
-                  .primary),
+              selectedIcon: Icon(Icons.play_arrow, color: Theme.of(context).colorScheme.primary),
               icon: const Icon(Icons.play_arrow_outlined),
               label: 'Lernen',
             ),
             NavigationDestination(
-              selectedIcon: Icon(Icons.school, color: Theme
-                  .of(context)
-                  .colorScheme
-                  .primary),
+              selectedIcon: Icon(Icons.school, color: Theme.of(context).colorScheme.primary),
               icon: const Icon(Icons.school_outlined),
               label: 'Shared',
             ),
@@ -130,7 +127,7 @@ class _AppContainerState extends State<AppContainer> {
   void destinationAction(BuildContext context) {
     switch (currentPageIndex) {
       case 0:
-        context.read<ExplorerContext>().deckId = 0;
+        context.read<ExplorerContext>().returnHome();
         break;
       case 1:
         break;
