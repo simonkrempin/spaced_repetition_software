@@ -53,24 +53,27 @@ class _ExplorerViewState extends State<ExplorerView> {
               );
             }
 
-            return Column(
-              children: [
-                ListView.separated(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  separatorBuilder: (context, index) => const SizedBox(height: 8),
-                  itemBuilder: (BuildContext context, int index) => ExplorerDeckItem(deck: decks[index]),
-                  itemCount: decks.length,
-                ),
-                if (decks.isNotEmpty && cards.isNotEmpty) const SizedBox(height: 8),
-                ListView.separated(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  separatorBuilder: (context, index) => const SizedBox(height: 8),
-                  itemBuilder: (BuildContext context, int index) => ExplorerCardItem(card: cards[index]),
-                  itemCount: cards.length,
-                ),
-              ],
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  ListView.separated(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    separatorBuilder: (context, index) => const SizedBox(height: 8),
+                    itemBuilder: (BuildContext context, int index) => ExplorerDeckItem(deck: decks[index]),
+                    itemCount: decks.length,
+                  ),
+                  if (decks.isNotEmpty && cards.isNotEmpty) const SizedBox(height: 8),
+                  ListView.separated(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    separatorBuilder: (context, index) => const SizedBox(height: 8),
+                    itemBuilder: (BuildContext context, int index) => ExplorerCardItem(card: cards[index]),
+                    itemCount: cards.length,
+                  ),
+                  const SizedBox(height: 108),
+                ],
+              ),
             );
           }
 
