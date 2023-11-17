@@ -67,6 +67,7 @@ class _CardDialogState extends State<CardDialog> {
         children: [
           TextField(
             controller: frontController,
+            maxLines: null,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
               hintText: "Front",
@@ -75,6 +76,7 @@ class _CardDialogState extends State<CardDialog> {
           const SizedBox(height: 8),
           TextField(
             controller: backController,
+            maxLines: null,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
               hintText: "Back",
