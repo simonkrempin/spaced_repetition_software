@@ -2,13 +2,12 @@ import "package:flutter/material.dart";
 import "package:spaced_repetition_software/app_container.dart";
 import 'package:spaced_repetition_software/context/explorer_context.dart';
 import "package:spaced_repetition_software/database/db_connector.dart";
-import "package:spaced_repetition_software/database/deck_card_repository.dart";
 import "package:provider/provider.dart";
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   DBConnector.connect();
-  checkForTables();
+  DBConnector.checkDbState();
   runApp(const MyApp());
 }
 

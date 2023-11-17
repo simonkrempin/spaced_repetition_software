@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
 import "package:spaced_repetition_software/dialog/card_dialog.dart";
 import "package:spaced_repetition_software/model/card.dart" as models;
-import "package:spaced_repetition_software/database/deck_card_repository.dart";
-import "package:spaced_repetition_software/services/card_deck_service.dart";
+import "package:spaced_repetition_software/database/card_repository.dart";
+import "package:spaced_repetition_software/services/card_service.dart";
 
 class ExplorerCardItem extends StatelessWidget {
   final models.Card card;

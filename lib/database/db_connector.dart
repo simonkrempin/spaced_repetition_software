@@ -1,4 +1,6 @@
 import 'package:sqflite/sqflite.dart';
+import "package:spaced_repetition_software/database/card_repository.dart" as card_repository;
+import "package:spaced_repetition_software/database/deck_repository.dart" as deck_repository;
 
 class DBConnector {
   static Future<Database>? _dbConnection;
@@ -12,5 +14,10 @@ class DBConnector {
       await connect();
     }
     return _dbConnection!;
+  }
+
+  static checkDbState() async {
+    card_repository.ensureDbStructure();
+    deck_repository.ensureDbStructure();
   }
 }

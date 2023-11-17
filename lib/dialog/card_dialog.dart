@@ -20,7 +20,7 @@ import "package:flutter/material.dart"
         Widget;
 import "package:provider/provider.dart";
 import "package:spaced_repetition_software/context/explorer_context.dart";
-import "package:spaced_repetition_software/database/deck_card_repository.dart";
+import "package:spaced_repetition_software/database/card_repository.dart";
 import "package:spaced_repetition_software/model/card.dart";
 
 typedef SaveCallback = void Function(String front, String back);

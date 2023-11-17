@@ -4,7 +4,8 @@ import "dart:async";
 import "package:spaced_repetition_software/model/deck.dart";
 import "package:spaced_repetition_software/model/card.dart";
 import "package:spaced_repetition_software/model/deck_content.dart";
-import "package:spaced_repetition_software/database/deck_card_repository.dart";
+import "package:spaced_repetition_software/database/card_repository.dart";
+import "package:spaced_repetition_software/database/deck_repository.dart";
 
 class ExplorerContext with ChangeNotifier {
   final Map<int, DeckContent> _deckCache = {};
@@ -27,7 +28,7 @@ class ExplorerContext with ChangeNotifier {
     return _deckTrace.last;
   }
 
-  set deck (Deck deckToAdd) {
+  set deck(Deck deckToAdd) {
     _deckTrace.add(deckToAdd);
     notifyListeners();
   }
