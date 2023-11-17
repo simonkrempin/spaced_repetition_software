@@ -38,55 +38,65 @@ class _ExplorerViewState extends State<ExplorerView> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8),
-      child: FutureBuilder(
-        future: context.watch<ExplorerContext>().getDeckContent(),
-        builder: (context, AsyncSnapshot<DeckContent> snapshot) {
-          if (snapshot.hasData) {
-            final List<Deck> decks = snapshot.data!.decks;
-            final List<Card> cards = snapshot.data!.cards;
+    return WillPopScope(
+      onWillPop: () async {
+        if (context.read<ExplorerContext>().deckId != 0) {
+          context.read<ExplorerContext>().goBackInDeck();
+          return false;
+        }
 
-            if (decks.isEmpty && cards.isEmpty) {
-              return const Center(
-                child: Text("Deck is empty"),
+        return true;
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: FutureBuilder(
+          future: context.watch<ExplorerContext>().getDeckContent(),
+          builder: (context, AsyncSnapshot<DeckContent> snapshot) {
+            if (snapshot.hasData) {
+              final List<Deck> decks = snapshot.data!.decks;
+              final List<Card> cards = snapshot.data!.cards;
+
+              if (decks.isEmpty && cards.isEmpty) {
+                return const Center(
+                  child: Text("Deck is empty"),
+                );
+              }
+
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    ListView.separated(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      separatorBuilder: (context, index) => const SizedBox(height: 8),
+                      itemBuilder: (BuildContext context, int index) => ExplorerDeckItem(deck: decks[index]),
+                      itemCount: decks.length,
+                    ),
+                    if (decks.isNotEmpty && cards.isNotEmpty) const SizedBox(height: 8),
+                    ListView.separated(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      separatorBuilder: (context, index) => const SizedBox(height: 8),
+                      itemBuilder: (BuildContext context, int index) => ExplorerCardItem(card: cards[index]),
+                      itemCount: cards.length,
+                    ),
+                    const SizedBox(height: 108),
+                  ],
+                ),
               );
             }
 
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                  ListView.separated(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    separatorBuilder: (context, index) => const SizedBox(height: 8),
-                    itemBuilder: (BuildContext context, int index) => ExplorerDeckItem(deck: decks[index]),
-                    itemCount: decks.length,
-                  ),
-                  if (decks.isNotEmpty && cards.isNotEmpty) const SizedBox(height: 8),
-                  ListView.separated(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    separatorBuilder: (context, index) => const SizedBox(height: 8),
-                    itemBuilder: (BuildContext context, int index) => ExplorerCardItem(card: cards[index]),
-                    itemCount: cards.length,
-                  ),
-                  const SizedBox(height: 108),
-                ],
-              ),
-            );
-          }
+            if (snapshot.hasError) {
+              return Center(
+                child: Text(snapshot.error.toString()),
+              );
+            }
 
-          if (snapshot.hasError) {
-            return Center(
-              child: Text(snapshot.error.toString()),
+            return const Center(
+              child: CircularProgressIndicator(),
             );
-          }
-
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
+          },
+        ),
       ),
     );
   }
