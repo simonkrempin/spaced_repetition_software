@@ -78,8 +78,7 @@ class _CardDialogState extends State<CardDialog> {
               ),
             ),
           const SizedBox(height: 8),
-          if (showBackImageSelector)
-            const DividerWithText(text: "or"),
+          if (showBackImageSelector) const DividerWithText(text: "or"),
           if (showBackImageSelector)
             TextButton.icon(
               onPressed: () {
@@ -95,10 +94,31 @@ class _CardDialogState extends State<CardDialog> {
               icon: const Icon(Icons.attach_file),
             ),
           if (backImage != null)
-            Image.memory(
-              backImage!,
-              fit: BoxFit.cover,
-              height: 200,
+            Stack(
+              children: [
+                Image.memory(
+                  backImage!,
+                  fit: BoxFit.cover,
+                  height: 200,
+                ),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          backImage = null;
+                          showTextSelector = true;
+                          showBackImageSelector = true;
+                        });
+                      },
+                      child: const Icon(Icons.clear, color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
             ),
           const SizedBox(height: 8),
           Row(
