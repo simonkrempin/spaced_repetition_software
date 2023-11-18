@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:provider/provider.dart";
 import "package:spaced_repetition_software/context/explorer_context.dart";
-import "package:spaced_repetition_software/model/deck.dart";
+import "package:spaced_repetition_software/models/deck.dart";
 import "package:spaced_repetition_software/database/deck_repository.dart";
 
 typedef SaveFunction = void Function(String name);

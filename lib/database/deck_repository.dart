@@ -1,5 +1,5 @@
 import 'package:spaced_repetition_software/database/db_connector.dart';
-import 'package:spaced_repetition_software/model/deck.dart';
+import 'package:spaced_repetition_software/models/deck.dart';
 
 Future<void> ensureDbStructure() async {
   var db = await DBConnector.getConnection();

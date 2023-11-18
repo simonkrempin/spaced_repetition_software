@@ -1,9 +1,14 @@
+import "dart:typed_data";
+
 import "package:flutter/material.dart"
     show
         AlertDialog,
         BuildContext,
         Column,
         FilledButton,
+        Icon,
+        IconButton,
+        Icons,
         InputDecoration,
         MainAxisAlignment,
         MainAxisSize,
@@ -21,7 +26,8 @@ import "package:flutter/material.dart"
 import "package:provider/provider.dart";
 import "package:spaced_repetition_software/context/explorer_context.dart";
 import "package:spaced_repetition_software/database/card_repository.dart";
-import "package:spaced_repetition_software/model/card.dart";
+import "package:spaced_repetition_software/models/card.dart";
+import "package:image_picker/image_picker.dart";
 
 typedef SaveCallback = void Function(String front, String back);
 
@@ -74,13 +80,23 @@ class _CardDialogState extends State<CardDialog> {
             ),
           ),
           const SizedBox(height: 8),
-          TextField(
-            controller: backController,
-            maxLines: null,
-            decoration: const InputDecoration(
-              border: OutlineInputBorder(),
-              hintText: "Back",
-            ),
+          Row(
+            children: [
+              TextField(
+                controller: backController,
+                maxLines: null,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: "Back",
+                ),
+              ),
+              IconButton(
+                onPressed: () {
+                  pickImage();
+                },
+                icon: const Icon(Icons.attach_file),
+              ),
+            ],
           ),
           const SizedBox(height: 8),
           Row(
@@ -104,5 +120,14 @@ class _CardDialogState extends State<CardDialog> {
         ],
       ),
     );
+  }
+
+  Future<Uint8List?> pickImage() async {
+    final ImagePicker imagePicker = ImagePicker();
+    final XFile? pickedFile = await imagePicker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      return await pickedFile.readAsBytes();
+    }
+    return null;
   }
 }

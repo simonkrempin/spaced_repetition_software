@@ -1,9 +1,9 @@
 import "package:flutter/material.dart" show ChangeNotifier;
 import "dart:async";
 
-import "package:spaced_repetition_software/model/deck.dart";
-import "package:spaced_repetition_software/model/card.dart";
-import "package:spaced_repetition_software/model/deck_content.dart";
+import "package:spaced_repetition_software/models/deck.dart";
+import "package:spaced_repetition_software/models/card.dart";
+import "package:spaced_repetition_software/models/deck_content.dart";
 import "package:spaced_repetition_software/database/card_repository.dart";
 import "package:spaced_repetition_software/database/deck_repository.dart";
 

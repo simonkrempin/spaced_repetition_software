@@ -17,7 +17,7 @@ import 'package:flutter/material.dart'
         EdgeInsets,
         BorderRadius,
         BoxDecoration;
-import 'package:spaced_repetition_software/model/card.dart';
+import 'package:spaced_repetition_software/models/card.dart';
 import 'package:spaced_repetition_software/database/card_repository.dart';
 import 'package:swipe_cards/swipe_cards.dart';
 import 'package:flip_card/flip_card.dart';

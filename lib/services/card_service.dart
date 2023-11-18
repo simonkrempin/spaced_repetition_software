@@ -2,8 +2,8 @@ import 'package:flutter/material.dart' show BuildContext;
 import 'package:provider/provider.dart';
 import 'package:spaced_repetition_software/context/explorer_context.dart';
 import 'package:spaced_repetition_software/database/card_repository.dart';
-import 'package:spaced_repetition_software/model/card.dart';
-import 'package:spaced_repetition_software/model/deck.dart';
+import 'package:spaced_repetition_software/models/card.dart';
+import 'package:spaced_repetition_software/models/deck.dart';
 
 void moveCard(BuildContext context, Deck targetDeck, Card droppedCard) async {
   droppedCard.deckId = targetDeck.id;

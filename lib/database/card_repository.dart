@@ -1,5 +1,5 @@
 import 'package:spaced_repetition_software/utils/date.dart';
-import 'package:spaced_repetition_software/model/card.dart';
+import 'package:spaced_repetition_software/models/card.dart';
 import 'package:spaced_repetition_software/database/db_connector.dart';
 
 Future<void> ensureDbStructure() async {

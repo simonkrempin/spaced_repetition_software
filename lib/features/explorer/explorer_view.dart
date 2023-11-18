@@ -19,9 +19,9 @@ import "package:provider/provider.dart";
 import 'package:spaced_repetition_software/context/explorer_context.dart';
 import 'package:spaced_repetition_software/features/explorer/components/explorer_card_item.dart';
 import 'package:spaced_repetition_software/features/explorer/components/explorer_deck_item.dart';
-import 'package:spaced_repetition_software/model/deck_content.dart';
-import 'package:spaced_repetition_software/model/deck.dart';
-import 'package:spaced_repetition_software/model/card.dart';
+import 'package:spaced_repetition_software/models/deck_content.dart';
+import 'package:spaced_repetition_software/models/deck.dart';
+import 'package:spaced_repetition_software/models/card.dart';
 
 class ExplorerView extends StatefulWidget {
   const ExplorerView({super.key});
