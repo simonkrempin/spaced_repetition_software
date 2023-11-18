@@ -1,8 +1,7 @@
 import 'dart:typed_data';
 
-import 'package:flutter/material.dart'
-    show AsyncSnapshot, BorderRadius, BoxDecoration, BuildContext, Center, CircularProgressIndicator, Container, EdgeInsets, FutureBuilder, Image, Padding, SizedBox, Stack, State, StatefulWidget, Text, Theme, Widget;
-import 'package:spaced_repetition_software/models/card.dart';
+import 'package:flutter/material.dart';
+import 'package:spaced_repetition_software/models/card.dart' as models;
 import 'package:spaced_repetition_software/database/card_repository.dart';
 import 'package:swipe_cards/swipe_cards.dart';
 import 'package:flip_card/flip_card.dart';
@@ -16,15 +15,30 @@ class LearningView extends StatefulWidget {
 }
 
 class _LearningViewState extends State<LearningView> {
-  late final Future<List<SwipeItem>> swipeItems = getSwipeItems();
+  late Future<List<SwipeItem>> swipeItems = getSwipeItems();
   late MatchEngine matchEngine;
+  bool nextMode = false;
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        const Center(
-          child: Text("finished for today"),
+        Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text("Finished Learning, Have A Break!"),
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    nextMode = true;
+                    swipeItems = getSwipeItems();
+                  });
+                },
+                child: const Text("Get Next Cards"),
+              )
+            ],
+          ),
         ),
         FutureBuilder(
           future: swipeItems,
@@ -36,7 +50,7 @@ class _LearningViewState extends State<LearningView> {
                 child: SwipeCards(
                   matchEngine: matchEngine,
                   itemBuilder: (BuildContext context, int index) {
-                    var card = snapshot.data![index].content as Card;
+                    var card = snapshot.data![index].content as models.Card;
                     return Padding(
                       padding: const EdgeInsets.all(24.0),
                       child: FlipCard(
@@ -80,12 +94,12 @@ class _LearningViewState extends State<LearningView> {
     List<SwipeItem> swipeItems = [];
 
     try {
-      var result = await getCardsToLearn();
+      var result = await (nextMode ? getNextCards() : getCardsToLearn());
       for (var card in result) {
         swipeItems.add(SwipeItem(
             content: card,
             likeAction: () {
-              cardContentKnown(card);
+              nextMode ? cardContentKnownOnNextMode(card) : cardContentKnown(card);
             },
             nopeAction: () {
               cardContentUnknown(card.id!);
