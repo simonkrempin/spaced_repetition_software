@@ -1,22 +1,21 @@
+import 'dart:typed_data';
+
 import 'package:spaced_repetition_software/utils/date.dart';
 import 'package:spaced_repetition_software/models/card.dart';
 import 'package:spaced_repetition_software/database/db_connector.dart';
+import 'package:sqflite/sqflite.dart';
 
-Future<void> ensureDbStructure() async {
-  var db = await DBConnector.getConnection();
-
-  var cardTable = await db.query("sqlite_master", where: "type = ? AND name = ?", whereArgs: ['table', 'card']);
-  if (cardTable.isEmpty) {
-    await db.execute("""
+Future<void> ensureDbStructure(Database db) async {
+  db.execute("""
       CREATE TABLE card (
         id INTEGER PRIMARY KEY,
         front TEXT,
-        back TEXT,
+        back_text TEXT,
+        back_image BLOB,
         deck_id INTEGER,
         repeat_next TEXT,
         repeat_last INTEGER
       )""");
-  }
 }
 
 Future<List<Card>> getCards(int deckId) async {
@@ -32,15 +31,15 @@ Future<List<Card>> getCardsToLearn() async {
   return cards.map((f) => Card.fromMap(f)).toList();
 }
 
-addCard(String front, String back, int deckId) async {
+addCard(String front, String? backText, Uint8List? image, int deckId) async {
   var db = await DBConnector.getConnection();
   await db.insert(
-      "card", {"front": front, "back": back, "deck_id": deckId, "repeat_next": getCurrentDate(), "repeat_last": 0});
+      "card", {"front": front, "back_text": backText, "back_image": image, "deck_id": deckId, "repeat_next": getCurrentDate(), "repeat_last": 0});
 }
 
 updateCard(Card card) async {
   var db = await DBConnector.getConnection();
-  await db.update("card", {"front": card.front, "back": card.back, "deck_id": card.deckId}, where: "id = ${card.id}");
+  await db.update("card", {"front": card.front, "back_text": card.backText, "back_image": card.backImage, "deck_id": card.deckId}, where: "id = ${card.id}");
 }
 
 Future<void> cardContentUnknown(int cardId) async {

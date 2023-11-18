@@ -36,10 +36,11 @@ class _AppContainerState extends State<AppContainer> {
               child: Text(context.read<ExplorerContext>().deckName, style: const TextStyle(color: Colors.white)),
             ),
             onAccept: (droppedItem) {
+              var parentDeck = context.read<ExplorerContext>().parentDeck;
               if (droppedItem is Deck) {
-                moveDeck(context, context.read<ExplorerContext>().parentDeck, droppedItem);
+                moveDeck(context, parentDeck, droppedItem);
               } else if (droppedItem is models.Card) {
-                moveCard(context, context.read<ExplorerContext>().parentDeck, droppedItem);
+                moveCard(context, parentDeck, droppedItem);
               } else {
                 throw Exception("Unknown dropped item type");
               }

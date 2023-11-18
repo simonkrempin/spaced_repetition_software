@@ -57,7 +57,7 @@ class _LearningViewState extends State<LearningView> {
                       child: FlipCard(
                         fill: Fill.fillBack,
                         front: _buildContainer(card.front),
-                        back: _buildContainer(card.back),
+                        back: _buildContainer(card.backText!), // TODO: this line needs to be changed
                       ),
                     );
                   },
