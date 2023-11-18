@@ -1,3 +1,5 @@
+import "dart:typed_data";
+
 import "package:flutter/material.dart";
 import "package:spaced_repetition_software/dialog/card_dialog.dart";
 import "package:spaced_repetition_software/models/card.dart" as models;
@@ -52,9 +54,10 @@ class ExplorerCardItem extends StatelessWidget {
       context: context,
       builder: (alertDialogContext) => CardDialog(
         card: card,
-        onSaved: (String front, String back) {
+        onSaved: (String front, String? backText, Uint8List? backImage) {
           card.front = front;
-          card.back = back;
+          card.backText = backText;
+          card.backImage = backImage;
           updateCard(card);
         },
         providerContext: context,

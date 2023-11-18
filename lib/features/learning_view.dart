@@ -1,22 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart'
-    show
-        AsyncSnapshot,
-        BuildContext,
-        Center,
-        CircularProgressIndicator,
-        Container,
-        FutureBuilder,
-        State,
-        StatefulWidget,
-        Text,
-        Widget,
-        Stack,
-        SizedBox,
-        Theme,
-        Padding,
-        EdgeInsets,
-        BorderRadius,
-        BoxDecoration;
+    show AsyncSnapshot, BorderRadius, BoxDecoration, BuildContext, Center, CircularProgressIndicator, Container, EdgeInsets, FutureBuilder, Image, Padding, SizedBox, Stack, State, StatefulWidget, Text, Theme, Widget;
 import 'package:spaced_repetition_software/models/card.dart';
 import 'package:spaced_repetition_software/database/card_repository.dart';
 import 'package:swipe_cards/swipe_cards.dart';
@@ -56,14 +41,12 @@ class _LearningViewState extends State<LearningView> {
                       padding: const EdgeInsets.all(24.0),
                       child: FlipCard(
                         fill: Fill.fillBack,
-                        front: _buildContainer(card.front),
-                        back: _buildContainer(card.back),
+                        front: _buildContainer(text: card.front),
+                        back: _buildContainer(text: card.backText, image: card.backImage),
                       ),
                     );
                   },
-                  onStackFinished: () {
-
-                  },
+                  onStackFinished: () {},
                 ),
               );
             }
@@ -83,13 +66,13 @@ class _LearningViewState extends State<LearningView> {
     );
   }
 
-  Container _buildContainer(String text) {
+  Container _buildContainer({String? text, Uint8List? image}) {
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Center(child: Text(text)),
+      child: image != null ? Image.memory(image) : Center(child: Text(text ?? "")),
     );
   }
 
@@ -100,14 +83,13 @@ class _LearningViewState extends State<LearningView> {
       var result = await getCardsToLearn();
       for (var card in result) {
         swipeItems.add(SwipeItem(
-          content: card,
-          likeAction: () {
-            cardContentKnown(card);
-          },
-          nopeAction: () {
-            cardContentUnknown(card.id!);
-          }
-        ));
+            content: card,
+            likeAction: () {
+              cardContentKnown(card);
+            },
+            nopeAction: () {
+              cardContentUnknown(card.id!);
+            }));
       }
     } catch (e) {
       return [];

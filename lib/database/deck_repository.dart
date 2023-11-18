@@ -1,13 +1,9 @@
 import 'package:spaced_repetition_software/database/db_connector.dart';
 import 'package:spaced_repetition_software/models/deck.dart';
+import 'package:sqflite/sqflite.dart';
 
-Future<void> ensureDbStructure() async {
-  var db = await DBConnector.getConnection();
-
-  var deckTable = await db.query("sqlite_master", where: "type = ? AND name = ?", whereArgs: ['table', 'deck']);
-  if (deckTable.isEmpty) {
-    await db.execute("CREATE TABLE deck (id INTEGER PRIMARY KEY, name TEXT, parent_id INTEGER)");
-  }
+Future<void> ensureDbStructure(Database db) async {
+  db.execute("CREATE TABLE deck (id INTEGER PRIMARY KEY, name TEXT, parent_id INTEGER)");
 }
 
 Future<List<Deck>> getDecks(int parentId) async {

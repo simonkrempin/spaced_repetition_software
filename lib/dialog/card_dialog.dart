@@ -1,39 +1,18 @@
 import "dart:typed_data";
 
-import "package:flutter/material.dart"
-    show
-        AlertDialog,
-        BuildContext,
-        Column,
-        FilledButton,
-        Icon,
-        IconButton,
-        Icons,
-        InputDecoration,
-        MainAxisAlignment,
-        MainAxisSize,
-        Navigator,
-        OutlineInputBorder,
-        Row,
-        SizedBox,
-        State,
-        StatefulWidget,
-        Text,
-        TextButton,
-        TextEditingController,
-        TextField,
-        Widget;
+import "package:flutter/material.dart";
 import "package:provider/provider.dart";
+import "package:spaced_repetition_software/components/divider_with_text.dart";
 import "package:spaced_repetition_software/context/explorer_context.dart";
 import "package:spaced_repetition_software/database/card_repository.dart";
-import "package:spaced_repetition_software/models/card.dart";
+import "package:spaced_repetition_software/models/card.dart" as models;
 import "package:image_picker/image_picker.dart";
 
-typedef SaveCallback = void Function(String front, String back);
+typedef SaveCallback = void Function(String front, String? backText, Uint8List? backImage);
 
 class CardDialog extends StatefulWidget {
   final BuildContext providerContext;
-  final Card? card;
+  final models.Card? card;
   final SaveCallback? onSaved;
 
   const CardDialog({
@@ -49,19 +28,28 @@ class CardDialog extends StatefulWidget {
 
 class _CardDialogState extends State<CardDialog> {
   late final frontController = TextEditingController(text: widget.card != null ? widget.card!.front : "");
-  late final backController = TextEditingController(text: widget.card != null ? widget.card!.back : "");
+  late final backController = TextEditingController(text: widget.card != null ? widget.card!.backText : "");
   late final int deckId = widget.providerContext.read<ExplorerContext>().deckId;
+  late Uint8List? backImage = widget.card?.backImage;
+  late bool showBackImageSelector = backController.text == "" && backImage == null;
+  late bool showTextSelector = widget.card?.backImage == null;
 
   void saveCard() {
     var front = frontController.text;
-    var back = backController.text;
+    var backText = backController.text == "" ? null : backController.text;
 
-    widget.onSaved == null ? addCard(front, back, deckId) : widget.onSaved!(front, back);
+    widget.onSaved == null ? addCard(front, backText, backImage, deckId) : widget.onSaved!(front, backText, backImage);
   }
 
   @override
   void initState() {
     super.initState();
+
+    backController.addListener(() {
+      setState(() {
+        showBackImageSelector = backController.text == "";
+      });
+    });
   }
 
   @override
@@ -80,24 +68,58 @@ class _CardDialogState extends State<CardDialog> {
             ),
           ),
           const SizedBox(height: 8),
-          Row(
-            children: [
-              TextField(
-                controller: backController,
-                maxLines: null,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: "Back",
+          if (showTextSelector)
+            TextField(
+              controller: backController,
+              maxLines: null,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: "Back",
+              ),
+            ),
+          const SizedBox(height: 8),
+          if (showBackImageSelector) const DividerWithText(text: "or"),
+          if (showBackImageSelector)
+            TextButton.icon(
+              onPressed: () {
+                pickImage().then((value) {
+                  setState(() {
+                    backImage = value;
+                    showTextSelector = false;
+                    showBackImageSelector = false;
+                  });
+                });
+              },
+              label: const Text("Upload Image"),
+              icon: const Icon(Icons.attach_file),
+            ),
+          if (backImage != null)
+            Stack(
+              children: [
+                Image.memory(
+                  backImage!,
+                  fit: BoxFit.cover,
+                  height: 200,
                 ),
-              ),
-              IconButton(
-                onPressed: () {
-                  pickImage();
-                },
-                icon: const Icon(Icons.attach_file),
-              ),
-            ],
-          ),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          backImage = null;
+                          showTextSelector = true;
+                          showBackImageSelector = true;
+                        });
+                      },
+                      child: const Icon(Icons.clear, color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,

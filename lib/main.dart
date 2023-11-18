@@ -3,11 +3,10 @@ import "package:spaced_repetition_software/app_container.dart";
 import 'package:spaced_repetition_software/context/explorer_context.dart';
 import "package:spaced_repetition_software/database/db_connector.dart";
 import "package:provider/provider.dart";
+import "package:spaced_repetition_software/loading_screen.dart";
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  DBConnector.connect();
-  DBConnector.checkDbState();
   runApp(const MyApp());
 }
 
@@ -30,8 +29,16 @@ class MyApp extends StatelessWidget {
       ),
       home: ChangeNotifierProvider(
         create: (_) => ExplorerContext(),
-        child: const AppContainer(),
-      )
+        child: FutureBuilder(
+          future: DBConnector.connect(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return const AppContainer();
+            }
+            return const LoadingScreen();
+          },
+        ),
+      ),
     );
   }
 }
